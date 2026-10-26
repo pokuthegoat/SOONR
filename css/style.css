@@ -332,7 +332,7 @@ p{font-size:16px;line-height:1.45;letter-spacing:-.01em;color:var(--muted)}
    Desktop: both pinned sections slide sideways (js/main.js sets the x positions every frame)
    ========================================================== */
 @media (min-width:901px){
-  .flow{height:420vh}
+  .flow{height:400vh}
   .flow-svg{display:none}
   .flow-in,.tour-in{display:block;position:relative;height:100vh;height:100svh}
   .flow-in>.l,.flow-in>.r,.flow-in>.src,.tour-in>.l{position:absolute;top:50%;left:32px;will-change:transform}
@@ -357,7 +357,8 @@ p{font-size:16px;line-height:1.45;letter-spacing:-.01em;color:var(--muted)}
   .tour .r{display:none}
   .swipe{position:static;height:auto;margin:0;overflow:visible}
   .slide{inset:auto;top:50%;left:32px;display:flex;align-items:center;gap:44px;opacity:0;transition:none;will-change:transform,opacity}
-  .shot{display:block;flex:none;height:min(66vh,580px);width:auto;border-radius:30px;border:1px solid rgba(255,255,255,.1);box-shadow:0 30px 70px rgba(0,0,0,.45)}
+  /* aspect-ratio: its width is known before the picture loads, so the row is measured right (it slid to wrong spots) */
+  .shot{display:block;flex:none;height:min(66vh,580px);width:auto;aspect-ratio:720/1564;border-radius:30px;border:1px solid rgba(255,255,255,.1)}
   .slide-t{width:min(330px,var(--colw,330px))}
   .slide.prev,.slide.on{transform:none}
   .slide-n{font-size:13px;color:var(--accent);margin-bottom:18px}

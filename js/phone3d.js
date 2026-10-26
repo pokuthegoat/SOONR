@@ -390,7 +390,7 @@ function start() {
       idle.rotation.z = Math.sin(t * 0.7) * 0.03;
       idle.rotation.x = Math.sin(t * 0.6) * 0.035;
     }
-    renderBox();
+    if (!window.__bandCover) renderBox(); // the band covers the whole screen: nothing to draw
   });
 }
 // Find where the phone's centre lands on screen, put the canvas box there and render only that part of the view.

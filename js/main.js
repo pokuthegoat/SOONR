@@ -260,8 +260,11 @@
     const F = M.fx, L = M.lay;
     const draw = span(p, 0.02, 0.1);
     const show = span(p, 0.03, 0.24); // a long stretch, so it eases out of the preview instead of darting out as the section pins
-    const T = F.travel * easeInOutCubic(span(p, 0.13, 0.86)); // how far the row has slid left
-    const sink = span(p, 0.86, 0.92);
+    // constant speed all the way (an eased slide crawled to a stop before the wallet), and the bead goes into the
+    // wallet at that same speed; the section ends soon after, with no dead stretch to scroll through
+    const T = F.travel * span(p, 0.12, 0.9);           // how far the row has slid left
+    const sinkEnd = 0.9 + 0.78 * 70 / F.travel;       // the 70px into the wallet, at the row's pace
+    const sink = span(p, 0.9, sinkEnd);
     flowL.style.transform = `translate3d(${f1(-T)}px,-50%,0)`;
     flowSrc.style.transform = `translate3d(${f1(F.srcX - T)}px,-50%,0)`;
     flowR.style.transform = `translate3d(${f1(F.walletX - T)}px,-50%,0)`;
@@ -278,7 +281,7 @@
     wallet.classList.toggle('lit', inWallet);
     odo(walletBal, sink >= 0.6 ? '100.00' : '0.00');
     wsteps.forEach((s, i) => s.el.classList.toggle('on', i < 2 ? stEls[i].classList.contains('on') : inWallet));
-    walletOk.classList.toggle('on', p >= 0.92);
+    walletOk.classList.toggle('on', sink >= 1);
   }
   // Phones: the preview sits above the wallet; the coin rides a curve from the preview's bottom edge into the
   // top of the wallet card.
@@ -326,8 +329,8 @@
 
   /* ---------- The app: the five steps ---------- */
   // Desktop: the heading and the five steps sit on one row; each step is the app's screen with its text beside it.
-  // Each scroll stretch slides the row so the next step lands in the left column (holds between moves), with the
-  // one after it waiting dimmed on the right. Phones: each step's text swipes in under its screen.
+  // Scrolling slides the row steadily, each step in turn reaching the left column, with the next one waiting
+  // dimmed on the right. Phones: each step's text swipes in under its screen.
   const tour = $('#tour');
   const slides = $$('.slide', tour);
   const dots = $$('#dots i');
@@ -349,8 +352,8 @@
     M.tx = tourItems.map((el, i) => { const at = x; x += el.offsetWidth + (i === 0 ? 110 : 120); return at; });
   }
   function updateTourX(p) {
-    const n = slides.length, raw = p * n, k = Math.min(n - 1, Math.floor(raw)), f = raw - k;
-    const pos = k + easeInOutCubic(clamp((f - 0.18) / 0.64, 0, 1));
+    const n = slides.length;
+    const pos = p * n; // moves steadily with the scroll (holds between steps felt stuck, then jumpy)
     const a = Math.floor(pos), b = Math.min(n, a + 1), t = pos - a;
     const off = M.tx[a] + (M.tx[b] - M.tx[a]) * t; // item `pos` at the left column
     tourItems.forEach((el, i) => {
@@ -597,6 +600,8 @@
   }
   function onScroll() {
     const y = scrollY;
+    // Paid as USDC → The app fill the whole screen with the opaque band: the 3D phone under it needn't render
+    window.__bandCover = y >= M.flowTop && y + M.vh <= M.tourTop + M.tourH;
     updateNav(y); updatePeriod(y); updateTour(y); updateBackground(y);
   }
   measure();
