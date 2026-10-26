@@ -1,6 +1,6 @@
 (() => {
   /* ---------- Contract address: the only thing to change at launch ---------- */
-  const CA = '0000000000000000000000000000000000000000pump'; // placeholder until the real address exists
+  const CA = 'GPv8mGb477LhiQrCTzDvscDSFryX1AK1c9fxhhPWpump';
 
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const $ = (s, r = document) => r.querySelector(s);
