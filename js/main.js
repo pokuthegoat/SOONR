@@ -94,7 +94,7 @@
     });
   });
 
-  /* ---------- Contract address buttons: short in the dock pill (full one on hover), full in the drop-down, copies on click ---------- */
+  /* ---------- Contract address button (above the footer): shows the full address, copies on click ---------- */
   const copyText = text => {
     const fallback = () => {
       const t = document.createElement('textarea');
@@ -126,21 +126,17 @@
   };
   $$('.ca').forEach(btn => {
     const v = $('.ca-v', btn);
-    const label = btn.matches('.ca-big, .ca-full') ? CA : CA.slice(0, 4) + '…' + CA.slice(-4); // the big one and the menu's show it all
+    const label = CA; // only the big one above the footer is left, and it shows it all
     v.textContent = label;
-    if (btn.closest('.dock') && !btn.matches('.ca-big, .ca-full')) btn.insertAdjacentHTML('beforeend', `<span class="ca-tip">${CA}<small>Click to copy</small></span>`);
-    const tip = $('.ca-tip small', btn);
     btn.addEventListener('click', () => {
       copyText(CA);
       burst(btn);
       btn.classList.add('copied');
       v.textContent = 'Copied';
-      if (tip) tip.textContent = 'Copied to clipboard';
       clearTimeout(btn._t);
       btn._t = setTimeout(() => {
         btn.classList.remove('copied');
         v.textContent = label;
-        if (tip) tip.textContent = 'Click to copy';
       }, 1600);
     });
   });

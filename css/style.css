@@ -92,10 +92,6 @@ p{font-size:16px;line-height:1.45;letter-spacing:-.01em;color:var(--muted)}
 .ca.copied .ca-v,.ca.copied .ca-ico{color:var(--bg)}
 .ca.copied .i-copy{opacity:0;transform:scale(.3)}
 .ca.copied .i-tick{opacity:1;transform:none}
-.ca-tip{position:absolute;top:calc(100% + 14px);left:50%;display:flex;flex-direction:column;gap:6px;padding:12px 14px;border-radius:10px;background:#0c1416;border:1px solid var(--line);white-space:nowrap;font-size:13px;color:var(--text);text-align:left;opacity:0;transform:translate(-50%,-6px);pointer-events:none;transition:opacity .25s ease,transform .4s var(--ease)}
-.ca-tip small{font-size:12px;color:var(--muted)}
-.ca:hover .ca-tip,.ca:focus-visible .ca-tip{opacity:1;transform:translate(-50%,0)}
-.ca.copied .ca-tip small{color:var(--accent)}
 .ca-big{height:auto;min-height:56px;max-width:100%;padding:8px 18px 8px 8px;font-size:16px}
 .ca-big .ca-tag{height:40px;padding:0 12px;font-size:12px}
 .ca-big .ca-v{min-width:0;white-space:normal;word-break:break-all;line-height:1.4;text-align:left}
@@ -407,7 +403,11 @@ p{font-size:16px;line-height:1.45;letter-spacing:-.01em;color:var(--muted)}
 .foot-links a:hover{color:#fff}
 .foot-note{margin-top:28px;max-width:52em;font-size:13px;color:var(--dim)}
 .wordmark{margin:60px 0 0;text-align:center;font-size:30vw;line-height:.8;font-weight:600;letter-spacing:-.07em;background:linear-gradient(180deg,rgba(157,241,245,.55),rgba(157,241,245,.04) 80%);-webkit-background-clip:text;background-clip:text;color:transparent;user-select:none}
-.foot-bottom{display:flex;justify-content:space-between;gap:20px;padding:24px 32px 28px;border-top:1px solid var(--line);font-size:13px;color:var(--dim);position:relative}
+.foot-bottom{display:flex;flex-direction:column;align-items:center;gap:10px;padding:26px 32px 30px;border-top:1px solid var(--line);font-size:14px;color:var(--muted);text-align:center;position:relative}
+.foot-bottom p,.legal-links{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 22px}
+.foot-bottom a{color:var(--soft);transition:color .25s ease}
+.foot-bottom a:hover{color:#fff}
+.legal-addr{font-size:12.5px;color:var(--dim)}
 
 /* ---------- Motion ---------- */
 .words-in .w{display:inline-block;opacity:0;transform:translateY(.3em);transition:opacity 1s var(--ease),transform 1s var(--ease);transition-delay:calc(var(--i) * 60ms)}
@@ -452,19 +452,15 @@ html.intro-on,html.intro-on body{overflow:hidden}
   .dock{left:10px;right:10px;top:10px;width:auto;max-width:520px;margin:0 auto;transform:translateY(-24px);justify-content:space-between}
   .dock.in{transform:none}
   .dock-links{display:none}
-  .dock .ca{flex:1;min-width:0;justify-content:flex-start}
-  .dock .ca-v{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .dock-name{display:none}
   .dock-brand{padding:0 2px}
   .burger{display:block}
   .dock>.tf-btn{display:none} /* phones: it's in the menu instead */
+  .dock>.sq-btn{margin-left:auto}
   .sheet .tf-wide{height:46px;margin-top:10px;padding:0 14px;border:0;font-size:16px;letter-spacing:0}
   .sheet{display:flex;flex-direction:column;gap:2px;position:absolute;left:0;right:0;top:calc(100% + 8px);padding:10px;border-radius:12px;background:rgba(12,18,20,.97);border:1px solid rgba(255,255,255,.08);opacity:0;transform:translateY(-10px);pointer-events:none;transition:opacity .3s ease,transform .45s var(--ease)}
   .dock.open .sheet{opacity:1;transform:none;pointer-events:auto}
   .sheet a{padding:14px 10px;font-size:22px;font-weight:500;letter-spacing:-.03em;border-bottom:1px solid var(--line)}
-  .sheet .ca{margin-top:10px;height:auto;min-height:40px;padding:6px 12px 6px 5px;font-size:13px}
-  .dock .sheet .ca-v{flex:1;white-space:normal;word-break:break-all;line-height:1.35;text-align:left}
-  .ca-tip{display:none}
 
   .hero{min-height:0;display:block;padding:70px 0 40px}
   .hero h1{font-size:50px}
@@ -519,7 +515,8 @@ html.intro-on,html.intro-on body{overflow:hidden}
 
   .foot-row{flex-direction:column;align-items:flex-start}
   .foot-links{gap:14px 20px}
-  .foot-bottom{flex-direction:column;padding:20px 18px 24px}
+  .foot-bottom{padding:22px 18px 26px}
+  .foot-bottom p,.legal-links{gap:6px 16px}
 }
 @media (max-width:900px) and (max-height:720px){
   .tour .label,.flow .label{display:none}
