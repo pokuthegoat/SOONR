@@ -177,7 +177,9 @@ p{font-size:16px;line-height:1.45;letter-spacing:-.01em;color:var(--muted)}
 /* the headline hugs the phone from the left, the way the lead and buttons do from the right */
 .hero .l{text-align:right}
 /* the floating cards sit either side of the phone (above its canvas) and leave as you scroll */
-.hero-stage{position:absolute;left:0;right:0;top:0;bottom:0;pointer-events:none;opacity:calc(1 - var(--out,0))}
+/* z-index 3: its own layer above the phone (.stage, 2). Without it the cards jumped behind the phone once the fade
+   below started, because a faded element is drawn as one group at the base level. */
+.hero-stage{position:absolute;left:0;right:0;top:0;bottom:0;z-index:3;pointer-events:none;opacity:calc(1 - var(--out,0))}
 .float{position:absolute;z-index:3;display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:10px;background:#0f181a;border:1px solid var(--line);box-shadow:0 18px 40px rgba(0,0,0,.45);font:400 13px/1.25 var(--app);white-space:nowrap;opacity:0;transition:opacity .8s ease,transform 1s var(--ease)}
 .float div{display:grid}
 .float b{font-weight:600}
