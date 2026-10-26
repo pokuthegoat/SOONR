@@ -71,6 +71,9 @@ p{font-size:16px;line-height:1.45;letter-spacing:-.01em;color:var(--muted)}
 /* TestFlight link in the nav: the one white button there */
 .tf-btn{display:inline-flex;align-items:center;justify-content:center;height:40px;padding:0 14px;border-radius:8px;background:#fff;color:#000;font-size:14px;font-weight:500;white-space:nowrap;flex:none;transition:background-color .25s ease}
 .tf-btn:hover{background:#e9f4f5}
+.tf-btn{gap:8px}
+.b-logo{width:16px;height:16px;flex:none}
+.btn .b-logo{width:18px;height:18px;margin-right:-2px}
 .tf-btn:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 .apk-btn{background:rgba(255,255,255,.1);color:#fff}
 .apk-btn:hover{background:rgba(255,255,255,.18)}
@@ -428,6 +431,11 @@ html.intro-on,html.intro-on body{overflow:hidden}
 @media (max-width:1100px){
   .dock-links a{padding:11px 9px}
   h2{font-size:42px}
+}
+/* small desktops: the nav (with both download buttons) only fits without the wordmark */
+@media (min-width:901px) and (max-width:1000px){
+  .dock-name{display:none}
+  .dock-links a{padding:11px 7px}
 }
 @media (max-width:900px){
   .wrap{padding:0 18px}
