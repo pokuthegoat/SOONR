@@ -254,9 +254,10 @@ p{font-size:16px;line-height:1.45;letter-spacing:-.01em;color:var(--muted)}
 /* ==========================================================
    PAID AS USDC — pinned; 100 USDC rides a line from the phone to the wallet (sideways on desktop, see below)
    ========================================================== */
-/* The band: from "Paid as USDC" to the end of "The app" the page is one solid colour, over the dot grid and under
-   everything else (section backgrounds paint above the fixed z-index:-1 layers and below the content and the phone). */
-.flow,.tour{background:var(--band)}
+/* The band: from "Paid as USDC" to the end of "The app" the page is one solid colour over everything behind it,
+   the 3D phone included (z-index 3 > the phone's 2): its hard edge sweeps over the phone on the way in and
+   uncovers it again at the FAQ. These two sections work without the phone. */
+.flow,.tour{position:relative;z-index:3;background:var(--band)}
 .flow{height:320vh}
 .flow-pin{position:sticky;z-index:3;top:0;height:100vh;height:100svh;display:flex;align-items:center;overflow:hidden}
 .flow-pin>.wrap{width:100%}
@@ -308,19 +309,22 @@ p{font-size:16px;line-height:1.45;letter-spacing:-.01em;color:var(--muted)}
 .dots i{width:7px;height:7px;border-radius:7px;background:rgba(255,255,255,.22);transition:width .45s var(--ease),background .45s ease}
 .dots i.on{width:26px;background:var(--accent)}
 .stations{display:none}
+.src{max-width:380px}
+.src .big{font-size:38px;margin-top:6px}
+.tour-spot{display:none}
+.shot{display:none}
 
 /* ==========================================================
    Desktop: both pinned sections slide sideways (js/main.js sets the x positions every frame)
    ========================================================== */
 @media (min-width:901px){
   .flow{height:420vh}
-  /* no z-index: the sliding parts pass behind the phone; the sticky pin is its own layer under it */
-  .flow-pin{z-index:auto}
   .flow-svg{display:none}
   .flow-in,.tour-in{display:block;position:relative;height:100vh;height:100svh}
-  .flow-in>.l,.flow-in>.r,.tour-in>.l{position:absolute;top:50%;left:32px;will-change:transform}
+  .flow-in>.l,.flow-in>.r,.flow-in>.src,.tour-in>.l{position:absolute;top:50%;left:32px;will-change:transform}
   .flow-in>.l,.tour-in>.l{width:var(--colw,380px)}
   .flow-in>.r{width:380px}
+  .flow-in>.src{width:min(340px,calc(var(--mid) - 20px))}
   .flow-in>.r .wallet{margin:0}
   .stations{display:block;position:absolute;top:50%;left:32px;height:0;will-change:transform}
   .hline{position:absolute;left:0;top:-1px;height:2px;width:var(--len,1000px);background:rgba(157,241,245,.2);transform-origin:left;transform:scaleX(var(--draw,0))}
@@ -338,7 +342,9 @@ p{font-size:16px;line-height:1.45;letter-spacing:-.01em;color:var(--muted)}
   .tour-pin{overflow:hidden}
   .tour .r{display:none}
   .swipe{position:static;height:auto;margin:0;overflow:visible}
-  .slide{inset:auto;top:50%;left:32px;width:var(--colw,380px);opacity:0;transition:none;will-change:transform,opacity}
+  .slide{inset:auto;top:50%;left:32px;display:flex;align-items:center;gap:44px;opacity:0;transition:none;will-change:transform,opacity}
+  .shot{display:block;flex:none;height:min(66vh,580px);width:auto;border-radius:30px;border:1px solid rgba(255,255,255,.1);box-shadow:0 30px 70px rgba(0,0,0,.45)}
+  .slide-t{width:min(330px,var(--colw,330px))}
   .slide.prev,.slide.on{transform:none}
   .slide-n{font-size:13px;color:var(--accent);margin-bottom:18px}
   .slide h3{font-size:44px;line-height:1.05;margin-bottom:14px}
@@ -458,7 +464,10 @@ html.intro-on,html.intro-on body{overflow:hidden}
   .flow-pin{align-items:flex-start;padding-top:80px} /* clears the nav at the top */
   .flow .lead{display:none}
   .flow h2{font-size:30px;margin-bottom:0}
-  .flow-spot{height:min(30svh,260px);margin:14px 0 14px}
+  .src{margin:14px 0 64px;padding:18px 20px} /* the gap is where the coin's curve runs */
+  .src .big{font-size:30px}
+  .src .kv{margin-top:8px}
+  .src .kv div:not(:last-child){display:none}
   .wallet{max-width:none;padding:18px}
   .wallet-bal{font-size:42px;margin:14px 0 14px}
   .wallet-steps{gap:8px;padding-top:12px}
@@ -470,7 +479,8 @@ html.intro-on,html.intro-on body{overflow:hidden}
 
   .tour-pin{align-items:flex-start;padding-top:80px}
   .tour h2{font-size:30px;margin-bottom:0}
-  .tour-spot{height:min(34svh,290px);margin:12px 0 0}
+  .tour-spot{display:block;height:min(42svh,360px);margin:12px 0 0}
+  .tour-shot{height:100%;width:auto;border-radius:18px;border:1px solid rgba(255,255,255,.1)}
   .tour .r{display:none}
   .swipe{margin-top:14px;height:140px}
   .slide h3{font-size:26px}

@@ -149,5 +149,8 @@ Promise.all(NAMES.map(load)).then((res) => {
   if (imgs.today) makeClockAlpha(imgs.today);
   for (const n in imgs) baked[n] = bake(n, imgs[n]);
   if (new URLSearchParams(location.search).has('screens')) window.__screens = baked; // debug: inspect the finished screens
+  // The app section shows these screens as pictures (the phone is covered there): hand over the cleaned-up copies.
+  window.__shots = Object.fromEntries(TOUR.filter((k) => baked[k]).map((k) => [k, baked[k].toDataURL('image/jpeg', 0.92)]));
+  dispatchEvent(new Event('shots:ready'));
   requestAnimationFrame(frame);
 });
