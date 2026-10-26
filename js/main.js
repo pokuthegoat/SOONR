@@ -145,7 +145,7 @@
     });
   });
 
-  /* ---------- Dock (the nav at the bottom): rises in after the intro; the menu opens upward on phones ---------- */
+  /* ---------- Dock (the nav at the top): drops in after the intro; the menu opens downward on phones ---------- */
   const navEl = $('#nav');
   const burger = $('#burger');
   const setSheet = open => {
@@ -237,8 +237,49 @@
              y: u * u * u * a.y + 3 * u * u * t * b.y + 3 * u * t * t * c.y + t * t * t * d.y };
   };
   const f1 = v => v.toFixed(1);
+  // Desktop: the section slides sideways. Its parts sit on one row (x in px from the left column's edge):
+  // the text, then the line from behind the phone with the three stages along it, then the wallet. The coin waits
+  // just right of the phone while the row slides left under it (the bright line fills up to it, each stage lights
+  // as it reaches it), and at the end the wallet arrives and the coin drops into it.
+  const flowIn = $('#flowIn'), flowL = $('.l', flowIn), flowR = $('.r', flowIn);
+  const stations = $('#stations'), stEls = $$('.st', stations);
+  function layoutFlowX() {
+    const L = M.lay, half = M.phoneHalf;
+    const phoneCx = L.colW + L.mid / 2;
+    const coinX = phoneCx + half + 84;                 // the chip (~120px wide) sits clear of the phone
+    const pitch = Math.max(300, L.colW * 0.92);
+    const st0 = L.colW + L.mid;                        // the first stage starts where the right column does
+    const stX = stEls.map((_, i) => st0 + i * pitch);
+    const walletX = st0 + 3 * pitch;
+    M.fx = { phoneCx, coinX, stX, walletX, travel: walletX - coinX - 18, len: walletX - phoneCx };
+    stations.style.setProperty('--len', M.fx.len + 'px');
+    stEls.forEach((el, i) => { el.style.left = (stX[i] - phoneCx) + 'px'; });
+  }
+  function updateFlowX(p) {
+    const F = M.fx, L = M.lay;
+    const draw = span(p, 0.02, 0.1);
+    const show = span(p, 0.08, 0.14);
+    const T = F.travel * easeInOutCubic(span(p, 0.12, 0.86)); // how far the row has slid left
+    const sink = span(p, 0.86, 0.9);
+    flowL.style.transform = `translate3d(${f1(-T)}px,-50%,0)`;
+    flowR.style.transform = `translate3d(${f1(F.walletX - T)}px,-50%,0)`;
+    stations.style.transform = `translate3d(${f1(F.phoneCx - T)}px,0,0)`;
+    stations.style.setProperty('--draw', easeOut(draw).toFixed(4));
+    const filled = clamp((F.coinX + 18 * sink - (F.phoneCx - T)) / F.len, 0, 1) * (show > 0 ? 1 : 0);
+    stations.style.setProperty('--fill', filled.toFixed(4));
+    stEls.forEach((el, i) => el.classList.toggle('on', F.stX[i] - T <= F.coinX + 1));
+    const cx = L.left + F.coinX + 18 * sink, cy = M.vh / 2;
+    const sc = (0.6 + 0.4 * easeOut(show)) * (1 - 0.6 * sink);
+    coin.style.transform = `translate(${f1(cx)}px,${f1(cy)}px) translate(-50%,-50%) scale(${sc.toFixed(3)})`;
+    coin.style.opacity = (show * (1 - sink)).toFixed(3);
+    odo(walletBal, p >= 0.9 ? '100.00' : '0.00');
+    wallet.classList.toggle('lit', p >= 0.88);
+    wsteps.forEach((s, i) => s.el.classList.toggle('on', i < 2 ? stEls[i].classList.contains('on') : p >= 0.9));
+    walletOk.classList.toggle('on', p >= 0.93);
+  }
   function updateFlow(y) {
     const p = clamp((y - M.flowTop) / (M.flowH - M.vh), 0, 1);
+    if (!M.isMobile) { updateFlowX(p); return; }
     // where the sticky pin's top is on screen, from cached numbers (reading layout every frame made it janky)
     const pinTop = y < M.flowTop ? M.flowTop - y : Math.min(0, M.flowTop + M.flowH - M.vh - y);
     if (pinTop > M.vh || pinTop < -M.vh) return;
@@ -300,8 +341,29 @@
   const stepItems = $$('#steps li');
   window.__tour = { p: 0, step: 0 };
   let tourStep = -1;
+  // Desktop: the heading and the five steps sit on one row, a column pitch apart (left column to right column).
+  // Each scroll stretch slides the row one pitch left, so the next step comes in dim on the right, passes behind
+  // the phone (which switches to its screen as it does) and settles bright in the left column. Holds between moves.
+  const tourItems = [$('.l', $('#tourIn')), ...slides];
+  function updateTourX(p) {
+    const L = M.lay, P = L.colW + L.mid, n = slides.length;
+    const raw = p * n, k = Math.min(n - 1, Math.floor(raw)), f = raw - k;
+    const pos = k + easeInOutCubic(clamp((f - 0.18) / 0.64, 0, 1));
+    tourItems.forEach((el, i) => {
+      const d = i - pos;
+      el.style.transform = `translate3d(${f1(d * P)}px,-50%,0)`;
+      el.style.opacity = (d >= 0 ? 1 - 0.62 * clamp(d, 0, 1) : clamp(1 + d * 2.2, 0, 1)).toFixed(3);
+    });
+    const step = Math.max(0, Math.round(pos) - 1);
+    window.__tour.p = p;
+    window.__tour.step = step;
+    if (step === tourStep) return;
+    tourStep = step;
+    dots.forEach((el, i) => el.classList.toggle('on', i === step));
+  }
   function updateTour(y) {
     const p = clamp((y - M.tourTop) / (M.tourH - M.vh), 0, 1);
+    if (!M.isMobile) { updateTourX(p); return; }
     const step = Math.min(slides.length - 1, Math.floor(p * slides.length));
     window.__tour.p = p;
     window.__tour.step = step;
@@ -509,11 +571,26 @@
       arts: arts.map(a => ({ c: pageTop(a.parentElement) + a.parentElement.offsetHeight / 2, h: a.parentElement.offsetHeight })),
     };
   }
+  // Column layout of .wrap (max 1240px, 32px padding) and the phone's column, for the sideways sections.
+  function measureSideways() {
+    const cw = document.documentElement.clientWidth, wrapW = Math.min(1240, cw);
+    const mid = clamp(cw * 0.27, 300, 380), inner = wrapW - 64;
+    M.lay = { left: (cw - wrapW) / 2 + 32, mid, colW: (inner - mid) / 2 };
+    M.phoneHalf = (window.__phoneAt?.h || M.vh * 0.6) * 0.245;
+    for (const el of [flowIn, $('#tourIn')]) el.style.setProperty('--colw', M.lay.colW + 'px');
+    if (M.isMobile) {
+      [flowL, flowR, stations, ...tourItems].forEach(el => { el.style.transform = ''; el.style.opacity = ''; });
+      tourStep = -1;
+      return;
+    }
+    layoutFlowX();
+  }
   function onScroll() {
     const y = scrollY;
     updateNav(y); updatePeriod(y); updateTour(y); updateBackground(y);
   }
   measure();
+  measureSideways();
   if (lenis) lenis.on('scroll', onScroll);
   else addEventListener('scroll', onScroll, { passive: true });
   // The coin follows the 3D phone (which floats and trails the scroll), so it's updated every frame.
@@ -523,7 +600,10 @@
     if (M && y > M.flowTop - M.vh && y < M.flowTop + M.flowH) updateFlow(y);
     requestAnimationFrame(flowLoop);
   })();
-  const remeasure = () => { measure(); onScroll(); };
+  const remeasure = () => { measure(); measureSideways(); onScroll(); };
+  // the phone's size is known once the 3D model has loaded: lay the sideways row out again then
+  const waitPhone = () => (window.__phoneAt ? remeasure() : setTimeout(waitPhone, 200));
+  waitPhone();
   addEventListener('resize', remeasure);
   new ResizeObserver(remeasure).observe(document.body);
   document.fonts.ready.then(remeasure);

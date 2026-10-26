@@ -75,10 +75,10 @@ const PATH = [
   { el: '#period',    pin: 'start', settle: 0.3, x: 0, s: 0.98, a: [0.03, 0.32, 0.02] },
   { el: '#period',    pin: 'end',   x: 0, s: 0.98, a: [0.03, 0.32, 0.02] },
   { el: '#try',       f: 0.5, x: 0, s: 1, a: [0.06, -0.3, -0.03] },
-  { el: '#flow',      pin: 'start', settle: 0.3, x: 0, s: 0.98, a: [0, -0.28, 0] },
-  { el: '#flow',      pin: 'end',   x: 0, s: 0.98, a: [0, -0.28, 0] },
-  { el: '#tour',      pin: 'start', settle: 0.4, x: 0, s: 1, a: [0, 0.22, 0] },
-  { el: '#tour',      pin: 'end',   x: 0, s: 1, a: [0, 0.22, 0] },
+  { el: '#flow',      pin: 'start', settle: 0.3, x: 0, s: 0.98, a: [0, -0.1, 0] },   // sideways sections: things pass behind it, so it
+  { el: '#flow',      pin: 'end',   x: 0, s: 0.98, a: [0, -0.1, 0] },   // faces nearly forward
+  { el: '#tour',      pin: 'start', settle: 0.4, x: 0, s: 1, a: [0, 0.1, 0] },
+  { el: '#tour',      pin: 'end',   x: 0, s: 1, a: [0, 0.1, 0] },
   { el: '#faq',       f: 0.5, x: 0, s: 0.98, a: [0.05, -0.24, 0.02] },
   { el: '.final-spot', box: true, a: [0, 0, 0] },
 ];

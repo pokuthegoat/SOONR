@@ -17,6 +17,7 @@
   --accent-soft:rgba(157,241,245,.14);
   --ok:#4fd3a1;
   --ease:cubic-bezier(.2,.8,.2,1);
+  --band:#071a1c;
   --mid:clamp(300px,27vw,380px);   /* the phone's column */
   --app:"Inter",system-ui,-apple-system,sans-serif;
   --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
@@ -82,7 +83,7 @@ p{font-size:16px;line-height:1.45;letter-spacing:-.01em;color:var(--muted)}
 .ca.copied .ca-v,.ca.copied .ca-ico{color:var(--bg)}
 .ca.copied .i-copy{opacity:0;transform:scale(.3)}
 .ca.copied .i-tick{opacity:1;transform:none}
-.ca-tip{position:absolute;bottom:calc(100% + 14px);left:50%;display:flex;flex-direction:column;gap:6px;padding:12px 14px;border-radius:10px;background:#0c1416;border:1px solid var(--line);white-space:nowrap;font-size:13px;color:var(--text);text-align:left;opacity:0;transform:translate(-50%,6px);pointer-events:none;transition:opacity .25s ease,transform .4s var(--ease)}
+.ca-tip{position:absolute;top:calc(100% + 14px);left:50%;display:flex;flex-direction:column;gap:6px;padding:12px 14px;border-radius:10px;background:#0c1416;border:1px solid var(--line);white-space:nowrap;font-size:13px;color:var(--text);text-align:left;opacity:0;transform:translate(-50%,-6px);pointer-events:none;transition:opacity .25s ease,transform .4s var(--ease)}
 .ca-tip small{font-size:12px;color:var(--muted)}
 .ca:hover .ca-tip,.ca:focus-visible .ca-tip{opacity:1;transform:translate(-50%,0)}
 .ca.copied .ca-tip small{color:var(--accent)}
@@ -93,7 +94,7 @@ p{font-size:16px;line-height:1.45;letter-spacing:-.01em;color:var(--muted)}
 /* ==========================================================
    DOCK — the nav floats at the bottom of the screen, like the app's tab bar
    ========================================================== */
-.dock{position:fixed;left:50%;bottom:18px;z-index:50;display:flex;align-items:center;gap:6px;padding:6px;border-radius:12px;background:rgba(12,18,20,.86);border:1px solid rgba(255,255,255,.08);box-shadow:0 20px 50px rgba(0,0,0,.45);transform:translate(-50%,24px);opacity:0;transition:opacity .6s ease,transform .8s var(--ease)}
+.dock{position:fixed;left:50%;top:18px;z-index:50;display:flex;align-items:center;gap:6px;padding:6px;border-radius:12px;background:rgba(12,18,20,.86);border:1px solid rgba(255,255,255,.08);box-shadow:0 20px 50px rgba(0,0,0,.45);transform:translate(-50%,-24px);opacity:0;transition:opacity .6s ease,transform .8s var(--ease)}
 .dock.in{opacity:1;transform:translate(-50%,0)}
 .dock-brand{display:flex;align-items:center;gap:9px;padding:0 10px 0 4px}
 .dock-brand .tile{width:30px;height:30px}
@@ -170,8 +171,9 @@ p{font-size:16px;line-height:1.45;letter-spacing:-.01em;color:var(--muted)}
 /* ==========================================================
    HERO
    ========================================================== */
-.hero{min-height:100vh;min-height:100svh;display:flex;align-items:flex-end;padding:120px 0 130px}
-.hero-in{width:100%;align-items:end}
+/* the headline and the lead sit level with the phone's middle, one either side of it */
+.hero{min-height:100vh;min-height:100svh;display:flex;align-items:center;padding:74px 0 0}
+.hero-in{width:100%;align-items:center}
 .hero h1{font-size:clamp(52px,5.4vw,78px)}
 .hero .r .lead{margin-bottom:28px}
 /* the headline hugs the phone from the left, the way the lead and buttons do from the right */
@@ -185,8 +187,8 @@ p{font-size:16px;line-height:1.45;letter-spacing:-.01em;color:var(--muted)}
 .float b{font-weight:600}
 .float span{color:var(--muted);font-size:11px}
 .float em{font-style:normal;font-weight:700;margin-left:8px}
-.hero-stage .f1{right:calc(50% + 86px);top:24%;transform:translateX(-24px)}
-.hero-stage .f2{left:calc(50% + 86px);top:44%;transform:translateX(24px)}
+.hero-stage .f1{right:calc(50% + 86px);top:17%;transform:translateX(-24px)}
+.hero-stage .f2{left:calc(50% + 86px);top:73%;transform:translateX(24px)}
 .hero.go .float{opacity:1;transform:none;animation:bob 5s ease-in-out 1.2s infinite}
 .hero.go .f2{transition-delay:.25s;animation-delay:2.4s}
 @keyframes bob{50%{translate:0 -8px}}
@@ -250,8 +252,11 @@ p{font-size:16px;line-height:1.45;letter-spacing:-.01em;color:var(--muted)}
 .kv .strong dt,.kv .strong dd{color:#fff;font-weight:500}
 
 /* ==========================================================
-   PAID AS USDC — pinned; 100 USDC rides a line from the phone to the wallet
+   PAID AS USDC — pinned; 100 USDC rides a line from the phone to the wallet (sideways on desktop, see below)
    ========================================================== */
+/* The band: from "Paid as USDC" to the end of "The app" the page is one solid colour, over the dot grid and under
+   everything else (section backgrounds paint above the fixed z-index:-1 layers and below the content and the phone). */
+.flow,.tour{background:var(--band)}
 .flow{height:320vh}
 .flow-pin{position:sticky;z-index:3;top:0;height:100vh;height:100svh;display:flex;align-items:center;overflow:hidden}
 .flow-pin>.wrap{width:100%}
@@ -259,7 +264,7 @@ p{font-size:16px;line-height:1.45;letter-spacing:-.01em;color:var(--muted)}
 .flow-svg path{fill:none;stroke-linecap:round}
 .flow-track{stroke:rgba(157,241,245,.24);stroke-width:1.5;stroke-dasharray:1;stroke-dashoffset:1}
 .flow-fill{stroke:var(--accent);stroke-width:2;stroke-dasharray:1;stroke-dashoffset:1}
-.port{fill:var(--bg);stroke:rgba(157,241,245,.55);stroke-width:1.5;opacity:0;transition:fill .35s ease,stroke .35s ease}
+.port{fill:var(--band);stroke:rgba(157,241,245,.55);stroke-width:1.5;opacity:0;transition:fill .35s ease,stroke .35s ease}
 .port.on{fill:var(--accent);stroke:var(--accent)}
 .port-ring{fill:none;stroke:var(--accent);stroke-width:1.5;opacity:0;transform-box:fill-box;transform-origin:center;vector-effect:non-scaling-stroke}
 .port-ring.go{animation:portpulse 1s var(--ease)}
@@ -287,7 +292,7 @@ p{font-size:16px;line-height:1.45;letter-spacing:-.01em;color:var(--muted)}
 .wallet-ok.on{transform:none}
 
 /* ==========================================================
-   THE APP — pinned; each step swipes in like the app's onboarding, with its pager dots
+   THE APP — pinned; phones: each step swipes in like the app's onboarding, with its pager dots (desktop: see below)
    ========================================================== */
 .tour{height:500vh}
 .tour-pin{position:sticky;top:0;height:100vh;height:100svh;display:flex;align-items:center}
@@ -302,6 +307,44 @@ p{font-size:16px;line-height:1.45;letter-spacing:-.01em;color:var(--muted)}
 .dots{display:flex;gap:6px;margin-top:6px}
 .dots i{width:7px;height:7px;border-radius:7px;background:rgba(255,255,255,.22);transition:width .45s var(--ease),background .45s ease}
 .dots i.on{width:26px;background:var(--accent)}
+.stations{display:none}
+
+/* ==========================================================
+   Desktop: both pinned sections slide sideways (js/main.js sets the x positions every frame)
+   ========================================================== */
+@media (min-width:901px){
+  .flow{height:420vh}
+  /* no z-index: the sliding parts pass behind the phone; the sticky pin is its own layer under it */
+  .flow-pin{z-index:auto}
+  .flow-svg{display:none}
+  .flow-in,.tour-in{display:block;position:relative;height:100vh;height:100svh}
+  .flow-in>.l,.flow-in>.r,.tour-in>.l{position:absolute;top:50%;left:32px;will-change:transform}
+  .flow-in>.l,.tour-in>.l{width:var(--colw,380px)}
+  .flow-in>.r{width:380px}
+  .flow-in>.r .wallet{margin:0}
+  .stations{display:block;position:absolute;top:50%;left:32px;height:0;will-change:transform}
+  .hline{position:absolute;left:0;top:-1px;height:2px;width:var(--len,1000px);background:rgba(157,241,245,.2);transform-origin:left;transform:scaleX(var(--draw,0))}
+  .hline-fill{position:absolute;left:0;top:0;height:2px;width:100%;background:var(--accent);transform-origin:left;transform:scaleX(var(--fill,0))}
+  .st{position:absolute;top:0;width:min(300px,var(--colw,300px));padding-top:30px;color:var(--dim);transition:color .5s ease}
+  .st i{position:absolute;left:0;top:-7px;width:14px;height:14px;border-radius:50%;background:var(--band);border:1.5px solid rgba(157,241,245,.4);transition:background .4s ease,border-color .4s ease,transform .5s var(--ease)}
+  .st b{position:absolute;left:0;top:-38px;font-size:12px;font-weight:500;letter-spacing:.3em;color:var(--dim);transition:color .5s ease}
+  .st h3{font-size:30px;line-height:1.1;margin-bottom:10px;color:inherit}
+  .st p{font-size:16px;line-height:1.4;color:inherit;max-width:20em}
+  .st.on{color:var(--text)}
+  .st.on b{color:var(--accent)}
+  .st.on i{background:var(--accent);border-color:var(--accent);transform:scale(1.15)}
+
+  .tour{height:600vh}
+  .tour-pin{overflow:hidden}
+  .tour .r{display:none}
+  .swipe{position:static;height:auto;margin:0;overflow:visible}
+  .slide{inset:auto;top:50%;left:32px;width:var(--colw,380px);opacity:0;transition:none;will-change:transform,opacity}
+  .slide.prev,.slide.on{transform:none}
+  .slide-n{font-size:13px;color:var(--accent);margin-bottom:18px}
+  .slide h3{font-size:44px;line-height:1.05;margin-bottom:14px}
+  .slide p{font-size:18px}
+  .dots{position:absolute;left:50%;bottom:44px;margin:0;transform:translateX(-50%)}
+}
 .steps{max-width:360px;margin-left:auto;border-top:1px solid var(--line)}
 .steps li{display:flex;align-items:baseline;gap:18px;padding:20px 0;border-bottom:1px solid var(--line);font-size:22px;font-weight:500;letter-spacing:-.03em;color:var(--dim);transition:color .45s ease,padding .5s var(--ease)}
 .steps li span{font-size:12px;letter-spacing:.2em;color:var(--dim);transition:color .45s ease}
@@ -343,7 +386,7 @@ p{font-size:16px;line-height:1.45;letter-spacing:-.01em;color:var(--muted)}
 .foot-links a:hover{color:#fff}
 .foot-note{margin-top:28px;max-width:52em;font-size:13px;color:var(--dim)}
 .wordmark{margin:60px 0 0;text-align:center;font-size:30vw;line-height:.8;font-weight:600;letter-spacing:-.07em;background:linear-gradient(180deg,rgba(157,241,245,.55),rgba(157,241,245,.04) 80%);-webkit-background-clip:text;background-clip:text;color:transparent;user-select:none}
-.foot-bottom{display:flex;justify-content:space-between;gap:20px;padding:24px 32px 110px;border-top:1px solid var(--line);font-size:13px;color:var(--dim);position:relative}
+.foot-bottom{display:flex;justify-content:space-between;gap:20px;padding:24px 32px 28px;border-top:1px solid var(--line);font-size:13px;color:var(--dim);position:relative}
 
 /* ---------- Motion ---------- */
 .words-in .w{display:inline-block;opacity:0;transform:translateY(.3em);transition:opacity 1s var(--ease),transform 1s var(--ease);transition-delay:calc(var(--i) * 60ms)}
@@ -380,7 +423,7 @@ html.intro-on,html.intro-on body{overflow:hidden}
   .tri>.l,.tri>.r,.final-spot{grid-column:1}
   .m-spot{display:block;position:relative;height:min(52svh,440px);margin:20px 0 26px}
 
-  .dock{left:10px;right:10px;bottom:10px;max-width:520px;margin:0 auto;transform:translateY(24px);justify-content:space-between}
+  .dock{left:10px;right:10px;top:10px;max-width:520px;margin:0 auto;transform:translateY(-24px);justify-content:space-between}
   .dock.in{transform:none}
   .dock-links{display:none}
   .dock .ca{flex:1;min-width:0;justify-content:flex-start}
@@ -388,7 +431,7 @@ html.intro-on,html.intro-on body{overflow:hidden}
   .dock-name{display:none}
   .dock-brand{padding:0 2px}
   .burger{display:block}
-  .sheet{display:flex;flex-direction:column;gap:2px;position:absolute;left:0;right:0;bottom:calc(100% + 8px);padding:10px;border-radius:12px;background:rgba(12,18,20,.97);border:1px solid rgba(255,255,255,.08);opacity:0;transform:translateY(10px);pointer-events:none;transition:opacity .3s ease,transform .45s var(--ease)}
+  .sheet{display:flex;flex-direction:column;gap:2px;position:absolute;left:0;right:0;top:calc(100% + 8px);padding:10px;border-radius:12px;background:rgba(12,18,20,.97);border:1px solid rgba(255,255,255,.08);opacity:0;transform:translateY(-10px);pointer-events:none;transition:opacity .3s ease,transform .45s var(--ease)}
   .dock.open .sheet{opacity:1;transform:none;pointer-events:auto}
   .sheet a{padding:14px 10px;font-size:22px;font-weight:500;letter-spacing:-.03em;border-bottom:1px solid var(--line)}
   .sheet .ca{margin-top:10px;height:auto;min-height:40px;padding:6px 12px 6px 5px;font-size:13px}
@@ -412,7 +455,7 @@ html.intro-on,html.intro-on body{overflow:hidden}
   .try-spot{height:min(48svh,400px)}
 
   .flow{height:280vh}
-  .flow-pin{align-items:flex-start;padding-top:50px}
+  .flow-pin{align-items:flex-start;padding-top:80px} /* clears the nav at the top */
   .flow .lead{display:none}
   .flow h2{font-size:30px;margin-bottom:0}
   .flow-spot{height:min(30svh,260px);margin:14px 0 14px}
@@ -425,7 +468,7 @@ html.intro-on,html.intro-on body{overflow:hidden}
   .coin{padding:4px 10px 4px 4px}
   .coin-face{width:20px;height:20px}
 
-  .tour-pin{align-items:flex-start;padding-top:50px}
+  .tour-pin{align-items:flex-start;padding-top:80px}
   .tour h2{font-size:30px;margin-bottom:0}
   .tour-spot{height:min(34svh,290px);margin:12px 0 0}
   .tour .r{display:none}
@@ -445,7 +488,7 @@ html.intro-on,html.intro-on body{overflow:hidden}
 
   .foot-row{flex-direction:column;align-items:flex-start}
   .foot-links{gap:14px 20px}
-  .foot-bottom{flex-direction:column;padding:20px 18px 100px}
+  .foot-bottom{flex-direction:column;padding:20px 18px 24px}
 }
 @media (max-width:900px) and (max-height:720px){
   .tour .label,.flow .label{display:none}
