@@ -223,14 +223,13 @@
   const flow = $('#flow');
   const flowPin = $('#flowPin');
   const fTrack = $('#flowTrack'), fFill = $('#flowFill');
-  const portA = $('#portA'), portB = $('#portB'), portRing = $('#portRing');
+  const portA = $('#portA'), portB = $('#portB');
   const coin = $('#coin');
   const wallet = $('#wallet');
   const walletBal = $('#walletBal');
   odo(walletBal, '0.00');
   const walletOk = $('#walletOk');
   const wsteps = $$('.ws', wallet).map(el => ({ el, at: +el.dataset.at }));
-  let landed = false;
   const cubic = (a, b, c, d, t) => {
     const u = 1 - t;
     return { x: u * u * u * a.x + 3 * u * u * t * b.x + 3 * u * t * t * c.x + t * t * t * d.x,
@@ -260,25 +259,26 @@
   function updateFlowX(p) {
     const F = M.fx, L = M.lay;
     const draw = span(p, 0.02, 0.1);
-    const show = span(p, 0.06, 0.13);
+    const show = span(p, 0.03, 0.24); // a long stretch, so it eases out of the preview instead of darting out as the section pins
     const T = F.travel * easeInOutCubic(span(p, 0.13, 0.86)); // how far the row has slid left
-    const sink = span(p, 0.86, 0.9);
+    const sink = span(p, 0.86, 0.92);
     flowL.style.transform = `translate3d(${f1(-T)}px,-50%,0)`;
     flowSrc.style.transform = `translate3d(${f1(F.srcX - T)}px,-50%,0)`;
     flowR.style.transform = `translate3d(${f1(F.walletX - T)}px,-50%,0)`;
     stations.style.transform = `translate3d(${f1(F.port - T)}px,0,0)`;
     stations.style.setProperty('--draw', easeOut(draw).toFixed(4));
-    const out = easeOut(show);
-    const cx = F.port + (F.coinX - F.port) * out + 18 * sink; // the coin on screen, from the left column's edge
+    // the bead starts hidden under the preview and slides out of its edge to its spot; at the end it runs on under the
+    // wallet's edge (which arrives 18px past that spot) and the wallet's border fills from there
+    const cx = F.port - 64 + (F.coinX - F.port + 64) * easeInOutCubic(show) + 70 * sink; // on screen, from the left column's edge; starts 64px in so its label is hidden too
     stations.style.setProperty('--fill', clamp((cx - (F.port - T)) / F.len, 0, 1).toFixed(4));
     stEls.forEach((el, i) => el.classList.toggle('on', F.stX[i] - T <= cx + 1));
-    const sc = (0.6 + 0.4 * out) * (1 - 0.6 * sink);
-    coin.style.transform = `translate(${f1(L.left + cx)}px,${f1(M.vh / 2)}px) translate(-50%,-50%) scale(${sc.toFixed(3)})`;
-    coin.style.opacity = (show * (1 - sink)).toFixed(3);
-    odo(walletBal, p >= 0.9 ? '100.00' : '0.00');
-    wallet.classList.toggle('lit', p >= 0.88);
-    wsteps.forEach((s, i) => s.el.classList.toggle('on', i < 2 ? stEls[i].classList.contains('on') : p >= 0.9));
-    walletOk.classList.toggle('on', p >= 0.93);
+    coin.style.transform = `translate3d(${f1(L.left + cx)}px,${f1(M.vh / 2)}px,0)`;
+    coin.style.setProperty('--ang', '0deg');
+    const inWallet = sink >= 0.26;                      // the bead has reached the wallet's edge
+    wallet.classList.toggle('lit', inWallet);
+    odo(walletBal, sink >= 0.6 ? '100.00' : '0.00');
+    wsteps.forEach((s, i) => s.el.classList.toggle('on', i < 2 ? stEls[i].classList.contains('on') : inWallet));
+    walletOk.classList.toggle('on', p >= 0.92);
   }
   // Phones: the preview sits above the wallet; the coin rides a curve from the preview's bottom edge into the
   // top of the wallet card.
@@ -294,30 +294,34 @@
     fTrack.setAttribute('d', d); fFill.setAttribute('d', d);
     portA.setAttribute('cx', f1(p0.x)); portA.setAttribute('cy', f1(p0.y));
     portB.setAttribute('cx', f1(p1.x)); portB.setAttribute('cy', f1(p1.y));
-    portRing.setAttribute('cx', f1(p1.x)); portRing.setAttribute('cy', f1(p1.y));
 
     const draw = span(p, 0.14, 0.24);                 // the faint track draws in, the ports appear
-    const show = span(p, 0.22, 0.3);                  // the chip appears at the phone's port
-    const t = easeInOutCubic(span(p, 0.3, 0.74));     // it rides the line
-    const sink = span(p, 0.74, 0.8);                   // and sinks into the wallet's port
+    // u: the bead's trip. It starts 26px up inside the preview (hidden under it), drops out of its bottom edge,
+    // rides the curve, and runs on 26px down into the wallet, under its top edge.
+    const u = easeInOutCubic(span(p, 0.22, 0.8));
+    const IN = 0.1, OUT = 0.9;
+    const t = clamp((u - IN) / (OUT - IN), 0, 1);     // how far along the curve
     fTrack.style.strokeDashoffset = (1 - easeOut(draw)).toFixed(4);
     fFill.style.strokeDashoffset = (1 - t).toFixed(4);
     portA.style.opacity = portB.style.opacity = draw.toFixed(3);
-    portA.classList.toggle('on', t > 0);
+    portA.classList.toggle('on', u > IN);
+    let at, ang;
+    if (u < IN) { at = { x: p0.x, y: p0.y - 26 * (1 - u / IN) }; ang = 90; }
+    else if (u > OUT) { at = { x: p1.x, y: p1.y + 26 * ((u - OUT) / (1 - OUT)) }; ang = 90; }
+    else {
+      at = cubic(p0, c1, c2, p1, t);
+      const q = cubic(p0, c1, c2, p1, Math.min(1, t + 0.01)), r = cubic(p0, c1, c2, p1, Math.max(0, t - 0.01));
+      ang = Math.atan2(q.y - r.y, q.x - r.x) * 180 / Math.PI; // the streak trails along the curve
+    }
+    coin.style.transform = `translate3d(${f1(at.x)}px,${f1(at.y)}px,0)`;
+    coin.style.setProperty('--ang', ang.toFixed(1) + 'deg');
 
-    const at = cubic(p0, c1, c2, p1, t);
-    const sc = (0.6 + 0.4 * easeOut(show)) * (1 - 0.6 * sink);
-    coin.style.transform = `translate(${f1(at.x)}px,${f1(at.y)}px) translate(-50%,-50%) scale(${sc.toFixed(3)})`;
-    coin.style.opacity = (show * (1 - sink)).toFixed(3);
-
-    odo(walletBal, p >= 0.8 ? '100.00' : '0.00');
-    wallet.classList.toggle('lit', p >= 0.78);
+    const inWallet = u >= OUT;
+    wallet.classList.toggle('lit', inWallet);
+    portB.classList.toggle('on', inWallet);
+    odo(walletBal, u >= 0.96 ? '100.00' : '0.00');
     wsteps.forEach(s => s.el.classList.toggle('on', p >= s.at));
-    walletOk.classList.toggle('on', p >= 0.9);
-    const arrived = sink >= 1;
-    portB.classList.toggle('on', arrived);
-    if (arrived && !landed) { portRing.classList.remove('go'); void portRing.getBBox(); portRing.classList.add('go'); }
-    landed = arrived;
+    walletOk.classList.toggle('on', p >= 0.88);
   }
 
   /* ---------- The app: the five steps ---------- */

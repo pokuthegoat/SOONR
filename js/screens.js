@@ -5,6 +5,8 @@
 //     rows copied from just below them (that area is a flat colour)
 //   · the status-bar clock reads 11:18 / 11:21 / 11:22 across the recording; every screen gets the same
 //     "11:21", lifted glyph-for-glyph from the Today frame onto the healed background
+//   · the recording has the Dynamic Island in it, but the 3D model has its own notch: the island is removed,
+//     each row of it rebuilt from the background pixels just left and right of it
 // The screen follows the section in the middle of the viewport; in The app it follows the step (main.js).
 
 const screen = window.__phoneScreen;
@@ -63,11 +65,28 @@ function fixClock(x) {
   x.putImageData(data, 0, 0);
 }
 
+// The Dynamic Island: x 248–471, y 25–89 on every frame; with its soft edge, 246–473. The status icons start at
+// x 478, so the right-hand sample (474) stays clear of them.
+const IS = { x0: 245, x1: 474, y0: 20, y1: 95 };
+function removeIsland(x) {
+  const w = IS.x1 - IS.x0 + 1, h = IS.y1 - IS.y0;
+  const data = x.getImageData(IS.x0, IS.y0, w, h), px = data.data;
+  for (let y = 0; y < h; y++) {
+    const l = y * w * 4, r = (y * w + w - 1) * 4;
+    for (let i = 1; i < w - 1; i++) {
+      const t = i / (w - 1), o = (y * w + i) * 4;
+      for (let k = 0; k < 3; k++) px[o + k] = px[l + k] * (1 - t) + px[r + k] * t;
+    }
+  }
+  x.putImageData(data, IS.x0, IS.y0);
+}
+
 // A frame plus its clean-ups, rendered once into its own canvas at screen size.
 function bake(name, img) {
   const f = document.createElement('canvas'); f.width = FW; f.height = FH;
   const x = f.getContext('2d', { willReadFrequently: true });
   x.drawImage(img, 0, 0);
+  removeIsland(x);
   if (name === 'signin') {
     x.drawImage(f, 0, 1100, FW, 40, 0, 1005, FW, 40); // "Developer details ›" (rows 1015–1035)
     x.drawImage(f, 0, 1490, FW, 34, 0, 1442, FW, 34); // "Test environment · test USDC" (rows 1451–1467)
