@@ -1,0 +1,457 @@
+/* ==========================================================
+   Soonr — landing page
+   Type, labels, buttons and panels follow paceearn.run (DM Sans, white spaced-capital labels,
+   8px buttons with a chevron disc, frosted panels over a grainy dot-grid backdrop).
+   Layout: the 3D phone stays in the middle of the screen; text on the left, cards on the right.
+   ========================================================== */
+
+:root{
+  --bg:#040508;
+  --text:#ffffff;
+  --soft:rgba(255,255,255,.86);
+  --muted:rgba(255,255,255,.62);
+  --dim:rgba(255,255,255,.42);
+  --line:rgba(255,255,255,.1);
+  --panel:rgba(255,255,255,.06);
+  --accent:#9DF1F5;
+  --accent-soft:rgba(157,241,245,.14);
+  --ok:#4fd3a1;
+  --ease:cubic-bezier(.2,.8,.2,1);
+  --mid:clamp(300px,27vw,380px);   /* the phone's column */
+  --app:"Inter",system-ui,-apple-system,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--bg);-webkit-text-size-adjust:100%;overflow-x:clip;scrollbar-gutter:stable;scrollbar-width:thin;scrollbar-color:rgba(157,241,245,.45) var(--bg)}
+body{background:transparent;color:var(--text);font-family:"DM Sans",system-ui,sans-serif;font-weight:400;-webkit-font-smoothing:antialiased;overflow-x:clip}
+img,svg{display:block}
+a{color:inherit;text-decoration:none}
+ul,ol{list-style:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+::selection{background:var(--accent);color:var(--bg)}
+main,.foot,section{position:relative}
+
+.wrap{max-width:1240px;margin:0 auto;padding:0 32px}
+.cy,.g{color:var(--accent)}
+.mono{font-family:var(--mono);font-size:.92em}
+
+/* ---------- Type (Pace) ---------- */
+h1{font-size:76px;line-height:1;font-weight:500;letter-spacing:-.03em}
+h2{font-size:48px;line-height:1.08;font-weight:500;letter-spacing:-.03em}
+h3{font-size:28px;line-height:1.15;font-weight:500;letter-spacing:-.03em}
+.label{display:block;font-size:12px;line-height:1;font-weight:500;letter-spacing:.3em;text-transform:uppercase;color:var(--text);margin-bottom:26px}
+.lead{font-size:18px;line-height:1.4;font-weight:400;letter-spacing:-.01em;color:var(--soft)}
+p{font-size:16px;line-height:1.45;letter-spacing:-.01em;color:var(--muted)}
+
+/* ---------- Tile (the app icon) ---------- */
+.tile{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:22%;background:var(--accent);flex:none}
+.tile svg{width:64%;height:64%;fill:#000}
+.tile.sm{width:28px;height:28px}
+
+/* ---------- Buttons (Pace: 8px, white with a black chevron disc / frosted grey) ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;height:48px;padding:16px 16px 16px 24px;border-radius:8px;font:400 16px/1 "DM Sans",sans-serif;letter-spacing:-.01em;white-space:nowrap;translate:calc(var(--mx,0) * 3px) calc(var(--my,0) * 3px);transition:background-color .25s ease,transform .25s var(--ease),translate .35s var(--ease)}
+.btn-ico{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;flex:none;overflow:hidden;translate:calc(var(--mx,0) * 4px) calc(var(--my,0) * 3px);transition:translate .35s var(--ease)}
+.btn-ico svg{width:20px;height:20px;transition:transform .35s var(--ease)}
+.btn:hover .btn-ico svg{transform:translateX(2px)}
+.btn:active{transform:scale(.97)}
+.btn:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.btn-light{background:#fff;color:#000}
+.btn-light:hover{background:#e9f4f5}
+.btn-light .btn-ico{background:#000;color:#fff}
+.btn-glass{padding:16px 24px;background:rgba(255,255,255,.1);color:#fff}
+.btn-glass:hover{background:rgba(255,255,255,.16)}
+.btn-row{display:flex;flex-wrap:wrap;gap:8px}
+
+.sq-btn{display:grid;place-items:center;width:40px;height:40px;border-radius:8px;background:rgba(255,255,255,.1);color:#fff;flex:none;transition:background .25s ease}
+.sq-btn svg{width:16px;height:16px}
+.sq-btn:hover{background:rgba(255,255,255,.18)}
+.sq-btn:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+
+/* ---------- Contract address: short in the button, full address in a pop-up on hover, copies on click ---------- */
+.ca{position:relative;flex:none;display:inline-flex;align-items:center;gap:9px;height:40px;padding:0 12px 0 5px;border-radius:8px;background:rgba(255,255,255,.08);color:var(--text);font:400 14px/1 "DM Sans",sans-serif;font-variant-numeric:tabular-nums;cursor:pointer;transition:background-color .25s ease}
+.ca-tag{height:30px;padding:0 9px;border-radius:6px;display:flex;align-items:center;background:var(--accent);color:var(--bg);font-size:11px;font-weight:600;letter-spacing:.14em;transition:background-color .25s ease,color .25s ease}
+.ca-v{min-width:5.2em;color:var(--soft);white-space:nowrap}
+.ca-ico{position:relative;width:16px;height:16px;color:var(--muted)}
+.ca-ico svg{position:absolute;inset:0;width:16px;height:16px;transition:transform .4s var(--ease),opacity .25s ease}
+.ca .i-tick{opacity:0;transform:scale(.3) rotate(-30deg)}
+.ca:hover{background:rgba(255,255,255,.14)}
+.ca:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.ca.copied{background:var(--accent)}
+.ca.copied .ca-tag{background:var(--bg);color:var(--accent)}
+.ca.copied .ca-v,.ca.copied .ca-ico{color:var(--bg)}
+.ca.copied .i-copy{opacity:0;transform:scale(.3)}
+.ca.copied .i-tick{opacity:1;transform:none}
+.ca-tip{position:absolute;bottom:calc(100% + 14px);left:50%;display:flex;flex-direction:column;gap:6px;padding:12px 14px;border-radius:10px;background:#0c1416;border:1px solid var(--line);white-space:nowrap;font-size:13px;color:var(--text);text-align:left;opacity:0;transform:translate(-50%,6px);pointer-events:none;transition:opacity .25s ease,transform .4s var(--ease)}
+.ca-tip small{font-size:12px;color:var(--muted)}
+.ca:hover .ca-tip,.ca:focus-visible .ca-tip{opacity:1;transform:translate(-50%,0)}
+.ca.copied .ca-tip small{color:var(--accent)}
+.ca-big{height:auto;min-height:56px;max-width:100%;padding:8px 18px 8px 8px;font-size:16px}
+.ca-big .ca-tag{height:40px;padding:0 12px;font-size:12px}
+.ca-big .ca-v{min-width:0;white-space:normal;word-break:break-all;line-height:1.4;text-align:left}
+
+/* ==========================================================
+   DOCK — the nav floats at the bottom of the screen, like the app's tab bar
+   ========================================================== */
+.dock{position:fixed;left:50%;bottom:18px;z-index:50;display:flex;align-items:center;gap:6px;padding:6px;border-radius:12px;background:rgba(12,18,20,.86);border:1px solid rgba(255,255,255,.08);box-shadow:0 20px 50px rgba(0,0,0,.45);transform:translate(-50%,24px);opacity:0;transition:opacity .6s ease,transform .8s var(--ease)}
+.dock.in{opacity:1;transform:translate(-50%,0)}
+.dock-brand{display:flex;align-items:center;gap:9px;padding:0 10px 0 4px}
+.dock-brand .tile{width:30px;height:30px}
+.dock-name{font-size:19px;font-weight:600;letter-spacing:-.04em}
+.dock-links{display:flex;gap:2px;padding:0 4px;border-left:1px solid var(--line);border-right:1px solid var(--line)}
+.dock-links a{padding:11px 13px;border-radius:8px;font-size:15px;color:var(--muted);transition:color .25s ease,background-color .25s ease}
+.dock-links a:hover{color:#fff}
+.dock-links a.active{color:#fff;background:rgba(255,255,255,.08)}
+.dock-links a:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.burger{display:none;position:relative;width:40px;height:40px;border-radius:8px;background:rgba(255,255,255,.1)}
+.burger i{position:absolute;left:12px;width:16px;height:1.5px;background:#fff;border-radius:2px;transition:transform .4s var(--ease),top .4s var(--ease)}
+.burger i:first-child{top:16px}
+.burger i:last-child{top:23px}
+.dock.open .burger i:first-child{top:19.5px;transform:rotate(45deg)}
+.dock.open .burger i:last-child{top:19.5px;transform:rotate(-45deg)}
+.sheet{display:none}
+
+/* ---------- Background: teal light, fluted-glass stripes, film grain (one static layer) ---------- */
+.bg-fx{position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
+    var(--bg)}
+
+/* The dot grid and the cursor's lit trail, both drawn on one canvas so they always line up (js/main.js) */
+.dot-trail{position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none}
+
+/* Rolling numbers: each digit is a 0–9 strip that slides to its value (js/main.js odo()) */
+.odo-c{position:relative;display:inline-block;clip-path:inset(0 -.1em);max-width:1em;transition:max-width .5s var(--ease),opacity .4s ease}
+.odo-c.off{max-width:0;opacity:0}
+.odo-h{visibility:hidden}
+.odo-s{position:absolute;left:0;top:0;width:100%;height:100%;transition:transform .9s var(--ease)}
+.odo-s i{display:block;height:100%;font-style:normal;text-align:center}
+/* Copy confirmation: a ring of grid dots bursts out of the CA button */
+.burst{position:fixed;z-index:60;width:0;height:0;pointer-events:none}
+.burst i{position:absolute;left:-2px;top:-2px;width:4px;height:4px;border-radius:50%;background:var(--accent)}
+
+
+
+/* The 3D phone's canvas: fixed over the page, a box around the phone that moves with it (js/phone3d.js) */
+.stage{position:fixed;left:0;top:0;z-index:2;pointer-events:none;opacity:0;transform:scale(.96);transition:opacity 1.2s ease,transform 1.4s var(--ease)}
+.stage.is-in{opacity:1;transform:none}
+
+/* ==========================================================
+   LAYOUT — three columns: text | the phone | cards
+   ========================================================== */
+.tri{display:grid;grid-template-columns:minmax(0,1fr) var(--mid) minmax(0,1fr);align-items:center}
+.tri>.l{grid-column:1}
+.tri>.r{grid-column:3}
+.m-spot{display:none}
+.l h2{margin-bottom:22px}
+.l .lead{max-width:24em}
+.sec{padding:180px 0}
+
+/* frosted panels (Pace) */
+.panel{position:relative;border-radius:12px;background:var(--panel);border:1px solid rgba(255,255,255,.06);padding:28px}
+/* a thin light on the panel's border that follows the cursor (js/main.js sets --px/--py) */
+.panel::before{content:"";position:absolute;inset:-1px;border-radius:inherit;padding:1px;pointer-events:none;background:radial-gradient(220px circle at var(--px,50%) var(--py,50%),#9df1f5,rgba(157,241,245,.35) 40%,transparent 75%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:0;transition:opacity .4s ease}
+.panel.edge::before{opacity:1}
+.lbl{display:block;font-size:13px;color:var(--muted)}
+.big{font-size:44px;font-weight:500;letter-spacing:-.04em;line-height:1.1;font-variant-numeric:tabular-nums}
+.big small{font-size:.5em;color:var(--muted)}
+.big .unit{font-size:.4em;font-weight:400;letter-spacing:0;color:var(--muted)}
+.big.xl{font-size:60px}
+.fine-s{display:block;color:var(--dim);font-size:13px;line-height:1.45;margin-top:10px}
+.fine-s.warn{color:#ffc58a}
+.row-h{display:flex;justify-content:space-between;align-items:baseline}
+.row-h span{color:var(--dim);font-size:12px}
+.row-h.small{margin-top:10px}
+.mi{flex:none;width:42px;height:42px;border-radius:10px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent);font-style:normal}
+.mi svg{width:21px;height:21px}
+.ok{flex:none;width:22px;height:22px;border-radius:50%;background:rgba(79,211,161,.16);color:var(--ok);display:grid;place-items:center;font-style:normal}
+.ok svg{width:16px;height:16px}
+
+/* ==========================================================
+   HERO
+   ========================================================== */
+.hero{min-height:100vh;min-height:100svh;display:flex;align-items:flex-end;padding:120px 0 130px}
+.hero-in{width:100%;align-items:end}
+.hero h1{font-size:clamp(52px,5.4vw,78px)}
+.hero .r .lead{margin-bottom:28px}
+/* the headline hugs the phone from the left, the way the lead and buttons do from the right */
+.hero .l{text-align:right}
+/* the floating cards sit either side of the phone (above its canvas) and leave as you scroll */
+.hero-stage{position:absolute;left:0;right:0;top:0;bottom:0;pointer-events:none;opacity:calc(1 - var(--out,0))}
+.float{position:absolute;z-index:3;display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:10px;background:#0f181a;border:1px solid var(--line);box-shadow:0 18px 40px rgba(0,0,0,.45);font:400 13px/1.25 var(--app);white-space:nowrap;opacity:0;transition:opacity .8s ease,transform 1s var(--ease)}
+.float div{display:grid}
+.float b{font-weight:600}
+.float span{color:var(--muted);font-size:11px}
+.float em{font-style:normal;font-weight:700;margin-left:8px}
+.hero-stage .f1{right:calc(50% + 86px);top:24%;transform:translateX(-24px)}
+.hero-stage .f2{left:calc(50% + 86px);top:44%;transform:translateX(24px)}
+.hero.go .float{opacity:1;transform:none;animation:bob 5s ease-in-out 1.2s infinite}
+.hero.go .f2{transition-delay:.25s;animation-delay:2.4s}
+@keyframes bob{50%{translate:0 -8px}}
+
+/* ==========================================================
+   HOW IT WORKS · pay period — pinned while the shifts fill
+   ========================================================== */
+.period{height:280vh}
+.period-pin{position:sticky;top:0;height:100vh;height:100svh;display:flex;align-items:center}
+.period-pin>.wrap{width:100%}
+.tl{padding:24px}
+.tl-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin-bottom:22px}
+.tl-head .big{font-size:38px}
+.tl-avail{text-align:right;opacity:0;transform:translateY(10px);transition:opacity .5s,transform .6s var(--ease)}
+.tl-avail.on{opacity:1;transform:none}
+.tl-grid{display:grid;grid-template-columns:repeat(19,1fr);gap:3px}
+.tl-day{display:grid;gap:7px;justify-items:center}
+.tl-day small{font-size:9px;font-weight:500;color:var(--dim)}
+.tl-day b{font-size:10px;font-weight:500;color:var(--dim);transition:color .3s}
+.tl-col{position:relative;width:100%;height:118px;border-radius:5px;background:rgba(255,255,255,.04);overflow:hidden}
+.tl-col::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,var(--accent),rgba(157,241,245,.35));transform:scaleY(0);transform-origin:bottom;transition:transform .55s var(--ease)}
+.tl-day.shift .tl-col{background:rgba(255,255,255,.08)}
+.tl-day.on .tl-col::after{transform:none}
+.tl-day.on b{color:#fff}
+.tl-day.after .tl-col{background:repeating-linear-gradient(135deg,rgba(255,255,255,.035) 0 5px,transparent 5px 10px)}
+.tl-day.today .tl-col{outline:1.5px solid var(--accent);outline-offset:2px}
+.tl-day.pay .tl-col{background:var(--accent-soft);border:1px dashed rgba(157,241,245,.5)}
+.tl-day.pay .tl-col::before{content:"$";position:absolute;inset:0;display:grid;place-items:center;color:var(--accent);font-weight:600;font-size:15px}
+.tl-foot{display:flex;gap:18px;flex-wrap:wrap;margin-top:18px;font-size:13px;color:var(--muted)}
+.tl-foot span{display:inline-flex;align-items:center;gap:8px}
+.tl-foot b{color:#fff;font-weight:500}
+.lg{display:inline-block;width:11px;height:11px;border-radius:3px;flex:none}
+.lg.on{background:var(--accent)}
+.lg.pay{background:var(--accent-soft);border:1px dashed var(--accent)}
+
+/* ==========================================================
+   TRY IT — choose an amount, the payout preview follows it
+   ========================================================== */
+.try-card .big.xl{margin-top:8px}
+.try-split{height:1px;background:var(--line);margin:24px -28px 20px}
+.range-wrap{position:relative;height:28px;margin-top:18px}
+.range-wrap::before{content:"";position:absolute;left:0;right:0;top:11px;height:6px;border-radius:6px;background:rgba(255,255,255,.1)}
+.range-fill{position:absolute;left:0;top:11px;height:6px;border-radius:6px;background:var(--accent);pointer-events:none}
+.range-wrap input{position:absolute;inset:0;z-index:2;width:100%;margin:0;background:transparent;-webkit-appearance:none;appearance:none;cursor:pointer}
+.range-wrap input::-webkit-slider-runnable-track{height:28px;background:transparent}
+.range-wrap input::-moz-range-track{height:28px;background:transparent}
+.range-wrap input::-webkit-slider-thumb{-webkit-appearance:none;width:28px;height:28px;border-radius:50%;background:var(--bg);border:2px solid #fff;box-shadow:0 0 0 6px rgba(157,241,245,.12);transition:box-shadow .25s var(--ease)}
+.range-wrap input::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:var(--bg);border:2px solid #fff}
+.range-wrap input:active::-webkit-slider-thumb{box-shadow:0 0 0 11px rgba(157,241,245,.2)}
+.range-wrap input:focus-visible{outline:2px solid var(--accent);outline-offset:6px;border-radius:6px}
+.chips{display:flex;gap:6px;margin:16px 0 4px}
+.chips button{flex:1;padding:10px 0;border-radius:8px;background:rgba(255,255,255,.07);font-size:14px;transition:background .25s,color .25s,transform .25s var(--ease)}
+.chips button:hover{background:rgba(255,255,255,.12)}
+.chips button:active{transform:scale(.95)}
+.chips .on,.chips button.on:hover{background:#fff;color:#000;font-weight:500}
+.kv{display:grid;gap:12px;margin-top:16px;font-size:15px}
+.kv div{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.kv dt{color:var(--muted)}
+.kv dt small{display:block;color:var(--dim);font-size:12px}
+.kv dd{font-variant-numeric:tabular-nums}
+.kv .strong dt,.kv .strong dd{color:#fff;font-weight:500}
+
+/* ==========================================================
+   PAID AS USDC — pinned; 100 USDC rides a line from the phone to the wallet
+   ========================================================== */
+.flow{height:320vh}
+.flow-pin{position:sticky;z-index:3;top:0;height:100vh;height:100svh;display:flex;align-items:center;overflow:hidden}
+.flow-pin>.wrap{width:100%}
+.flow-svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible;z-index:3}
+.flow-svg path{fill:none;stroke-linecap:round}
+.flow-track{stroke:rgba(157,241,245,.24);stroke-width:1.5;stroke-dasharray:1;stroke-dashoffset:1}
+.flow-fill{stroke:var(--accent);stroke-width:2;stroke-dasharray:1;stroke-dashoffset:1}
+.port{fill:var(--bg);stroke:rgba(157,241,245,.55);stroke-width:1.5;opacity:0;transition:fill .35s ease,stroke .35s ease}
+.port.on{fill:var(--accent);stroke:var(--accent)}
+.port-ring{fill:none;stroke:var(--accent);stroke-width:1.5;opacity:0;transform-box:fill-box;transform-origin:center;vector-effect:non-scaling-stroke}
+.port-ring.go{animation:portpulse 1s var(--ease)}
+@keyframes portpulse{0%{opacity:.9;transform:scale(1)}100%{opacity:0;transform:scale(5.5)}}
+.coin{position:absolute;left:0;top:0;z-index:4;display:flex;align-items:center;gap:7px;padding:5px 12px 5px 5px;border-radius:999px;background:#0b1517;border:1px solid rgba(157,241,245,.55);color:var(--text);white-space:nowrap;opacity:0;pointer-events:none;box-shadow:0 10px 30px rgba(0,0,0,.5);will-change:transform,opacity}
+.coin b{font-size:14px;font-weight:500;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.coin small{font-size:11px;font-weight:500;letter-spacing:.08em;color:var(--muted)}
+.coin-face{width:24px;height:24px;border-radius:50%;background:var(--accent);display:grid;place-items:center}
+.coin-face svg{width:56%;height:56%;fill:var(--bg)}
+.wallet{position:relative;max-width:380px;margin-left:auto;transition:border-color .5s ease,background-color .5s ease}
+.wallet.lit{border-color:rgba(157,241,245,.4);background:rgba(157,241,245,.06)}
+.wallet-h{display:flex;align-items:center;gap:14px}
+.wallet-h div{display:grid;gap:3px}
+.wallet-h b{font-size:17px;font-weight:500}
+.wallet-h .mono{font-size:12px;color:var(--muted)}
+.wallet-bal{margin:24px 0 20px;font-size:56px;font-weight:500;letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums}
+.wallet-bal small{font-size:20px;font-weight:400;letter-spacing:0;color:var(--muted);margin-left:10px}
+.wallet-steps{display:grid;gap:11px;padding-top:18px;border-top:1px solid var(--line)}
+.ws{display:flex;align-items:center;gap:12px;font-size:14px;color:var(--dim);transition:color .45s ease}
+.ws i{flex:none;width:9px;height:9px;border-radius:50%;border:1.5px solid var(--dim);transition:background .45s ease,border-color .45s ease,transform .5s var(--ease)}
+.ws.on{color:var(--text)}
+.ws.on i{background:var(--accent);border-color:var(--accent);transform:scale(1.2)}
+.wallet-ok{position:absolute;top:22px;right:22px;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:var(--ok);color:#03140c;transform:scale(0) rotate(-40deg);transition:transform .6s var(--ease)}
+.wallet-ok svg{width:24px;height:24px}
+.wallet-ok.on{transform:none}
+
+/* ==========================================================
+   THE APP — pinned; each step swipes in like the app's onboarding, with its pager dots
+   ========================================================== */
+.tour{height:500vh}
+.tour-pin{position:sticky;top:0;height:100vh;height:100svh;display:flex;align-items:center}
+.tour-pin>.wrap{width:100%}
+.swipe{position:relative;height:160px;margin-top:34px;overflow:hidden}
+.slide{position:absolute;inset:0;opacity:0;transform:translateX(56px);transition:opacity .45s ease,transform .6s var(--ease)}
+.slide.prev{transform:translateX(-56px)}
+.slide.on{opacity:1;transform:none}
+.slide-n{display:block;font-size:12px;font-weight:500;letter-spacing:.3em;color:var(--dim);margin-bottom:14px}
+.slide h3{font-size:34px;margin-bottom:10px}
+.slide p{font-size:17px;color:var(--soft);max-width:24em}
+.dots{display:flex;gap:6px;margin-top:6px}
+.dots i{width:7px;height:7px;border-radius:7px;background:rgba(255,255,255,.22);transition:width .45s var(--ease),background .45s ease}
+.dots i.on{width:26px;background:var(--accent)}
+.steps{max-width:360px;margin-left:auto;border-top:1px solid var(--line)}
+.steps li{display:flex;align-items:baseline;gap:18px;padding:20px 0;border-bottom:1px solid var(--line);font-size:22px;font-weight:500;letter-spacing:-.03em;color:var(--dim);transition:color .45s ease,padding .5s var(--ease)}
+.steps li span{font-size:12px;letter-spacing:.2em;color:var(--dim);transition:color .45s ease}
+.steps li.done{color:var(--muted)}
+.steps li.on{color:#fff;padding-left:10px}
+.steps li.on span{color:var(--accent)}
+
+/* ==========================================================
+   FAQ — a flat list beside the phone
+   ========================================================== */
+.faq-list{border-top:1px solid var(--line)}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:20px;padding:22px 0;font-size:19px;font-weight:500;letter-spacing:-.02em;color:var(--soft);transition:color .3s ease}
+.faq summary:hover,.faq details[open] summary{color:#fff}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:focus-visible{outline:2px solid var(--accent);outline-offset:4px;border-radius:6px}
+.faq summary i{flex:none;width:30px;height:30px;border-radius:8px;display:grid;place-items:center;background:rgba(255,255,255,.08);color:#fff;transition:transform .45s var(--ease),background .3s,color .3s}
+.faq summary i svg{width:15px;height:15px}
+.faq details[open] summary i{transform:rotate(45deg);background:#fff;color:#000}
+.faq-a p{padding:0 44px 24px 0;font-size:16px;color:var(--muted);animation:faqin .5s var(--ease)}
+@keyframes faqin{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+
+/* ==========================================================
+   FINAL — the phone lands on the app's splash
+   ========================================================== */
+.final{padding:160px 0 200px}
+.final-spot{grid-column:2;height:min(60vh,560px)}
+.final h2{font-size:56px;margin-bottom:28px}
+.final-r{display:flex;flex-direction:column;align-items:flex-start}
+.final-r .label{margin-bottom:18px}
+
+/* ==========================================================
+   FOOTER — a giant wordmark
+   ========================================================== */
+.foot{padding:80px 0 0;overflow:hidden;border-top:1px solid var(--line);background:linear-gradient(var(--bg),#071315);z-index:3}
+.foot-row{display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap}
+.foot-links{display:flex;gap:26px;flex-wrap:wrap}
+.foot-links a{font-size:15px;color:var(--muted);transition:color .25s ease}
+.foot-links a:hover{color:#fff}
+.foot-note{margin-top:28px;max-width:52em;font-size:13px;color:var(--dim)}
+.wordmark{margin:60px 0 0;text-align:center;font-size:30vw;line-height:.8;font-weight:600;letter-spacing:-.07em;background:linear-gradient(180deg,rgba(157,241,245,.55),rgba(157,241,245,.04) 80%);-webkit-background-clip:text;background-clip:text;color:transparent;user-select:none}
+.foot-bottom{display:flex;justify-content:space-between;gap:20px;padding:24px 32px 110px;border-top:1px solid var(--line);font-size:13px;color:var(--dim);position:relative}
+
+/* ---------- Motion ---------- */
+.words-in .w{display:inline-block;opacity:0;transform:translateY(.3em);transition:opacity 1s var(--ease),transform 1s var(--ease);transition-delay:calc(var(--i) * 60ms)}
+.words-in.in .w{opacity:1;transform:none}
+.rise{opacity:0;transform:translateY(28px);transition:opacity .9s ease,transform 1s var(--ease)}
+.rise.in{opacity:1;transform:none}
+
+/* ---------- Intro: the S tile, a phone outline draws around it while the 3D phone loads ---------- */
+.intro{position:fixed;inset:0;z-index:100;display:grid;place-items:center;background:var(--bg);transition:opacity .8s ease,visibility 0s linear .8s}
+.intro.done{opacity:0;visibility:hidden}
+.intro>*{grid-area:1/1}
+.intro-phone{width:150px;height:auto;overflow:visible}
+.intro-phone rect{fill:none}
+.intro-track{stroke:rgba(255,255,255,.08);stroke-width:2}
+.intro-fill{stroke:var(--accent);stroke-width:2.5;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1}
+.intro-tile{width:64px;height:64px;border-radius:15px}
+html.intro-on,html.intro-on body{overflow:hidden}
+
+/* ==========================================================
+   Responsive
+   ========================================================== */
+@media (max-width:1100px){
+  .dock-links a{padding:11px 9px}
+  h2{font-size:42px}
+}
+@media (max-width:900px){
+  .wrap{padding:0 18px}
+  h1{font-size:48px}
+  h2{font-size:34px}
+  .lead{font-size:17px}
+  .sec{padding:120px 0}
+  /* one column: text, the phone's slot, then the card */
+  .tri{grid-template-columns:1fr}
+  .tri>.l,.tri>.r,.final-spot{grid-column:1}
+  .m-spot{display:block;position:relative;height:min(52svh,440px);margin:20px 0 26px}
+
+  .dock{left:10px;right:10px;bottom:10px;max-width:520px;margin:0 auto;transform:translateY(24px);justify-content:space-between}
+  .dock.in{transform:none}
+  .dock-links{display:none}
+  .dock .ca{flex:1;min-width:0;justify-content:flex-start}
+  .dock .ca-v{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .dock-name{display:none}
+  .dock-brand{padding:0 2px}
+  .burger{display:block}
+  .sheet{display:flex;flex-direction:column;gap:2px;position:absolute;left:0;right:0;bottom:calc(100% + 8px);padding:10px;border-radius:12px;background:rgba(12,18,20,.97);border:1px solid rgba(255,255,255,.08);opacity:0;transform:translateY(10px);pointer-events:none;transition:opacity .3s ease,transform .45s var(--ease)}
+  .dock.open .sheet{opacity:1;transform:none;pointer-events:auto}
+  .sheet a{padding:14px 10px;font-size:22px;font-weight:500;letter-spacing:-.03em;border-bottom:1px solid var(--line)}
+  .sheet .ca{margin-top:10px;height:auto;min-height:40px;padding:6px 12px 6px 5px;font-size:13px}
+  .dock .sheet .ca-v{flex:1;white-space:normal;word-break:break-all;line-height:1.35;text-align:left}
+  .ca-tip{display:none}
+
+  .hero{min-height:0;display:block;padding:70px 0 40px}
+  .hero h1{font-size:50px}
+  .hero .l{text-align:left}
+  .hero-stage{display:none}
+  .hero-spot{height:min(54svh,460px)}
+  .hero-spot .f1{left:0;bottom:16%;transform:translateX(-16px)}
+  .hero-spot .f2{right:0;top:8%;transform:translateX(16px)}
+
+  .period{height:230vh}
+  .period-pin{align-items:flex-start;padding-top:60px}
+  .period .lead,.period-spot{display:none}
+  .tl-grid{gap:2px}
+  .tl-col{height:110px}
+
+  .try-spot{height:min(48svh,400px)}
+
+  .flow{height:280vh}
+  .flow-pin{align-items:flex-start;padding-top:50px}
+  .flow .lead{display:none}
+  .flow h2{font-size:30px;margin-bottom:0}
+  .flow-spot{height:min(30svh,260px);margin:14px 0 14px}
+  .wallet{max-width:none;padding:18px}
+  .wallet-bal{font-size:42px;margin:14px 0 14px}
+  .wallet-steps{gap:8px;padding-top:12px}
+  .ws{font-size:13px}
+  .wallet-ok{top:16px;right:16px;width:34px;height:34px}
+  .coin b{font-size:13px}
+  .coin{padding:4px 10px 4px 4px}
+  .coin-face{width:20px;height:20px}
+
+  .tour-pin{align-items:flex-start;padding-top:50px}
+  .tour h2{font-size:30px;margin-bottom:0}
+  .tour-spot{height:min(34svh,290px);margin:12px 0 0}
+  .tour .r{display:none}
+  .swipe{margin-top:14px;height:140px}
+  .slide h3{font-size:26px}
+  .slide p{font-size:15px}
+
+  .faq-spot{display:none}
+  .faq .l{margin-bottom:30px}
+  .faq summary{font-size:17px;padding:18px 0}
+  .faq-a p{padding-right:0;font-size:15px}
+
+  .final{padding:100px 0 140px}
+  .final h2{font-size:40px}
+  .final-spot{height:min(48svh,400px);margin:30px 0}
+  .ca-big{max-width:100%;font-size:13px}
+
+  .foot-row{flex-direction:column;align-items:flex-start}
+  .foot-links{gap:14px 20px}
+  .foot-bottom{flex-direction:column;padding:20px 18px 100px}
+}
+@media (max-width:900px) and (max-height:720px){
+  .tour .label,.flow .label{display:none}
+  .swipe{height:120px}
+  .ws:not(.on){display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  .intro{display:none}
+  .words-in .w,.rise{opacity:1;transform:none}
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;transition-delay:0s!important}
+}
