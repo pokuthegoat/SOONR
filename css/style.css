@@ -68,6 +68,12 @@ p{font-size:16px;line-height:1.45;letter-spacing:-.01em;color:var(--muted)}
 .sq-btn svg{width:16px;height:16px}
 .sq-btn:hover{background:rgba(255,255,255,.18)}
 .sq-btn:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+/* TestFlight link in the nav: the one white button there */
+.tf-btn{display:inline-flex;align-items:center;justify-content:center;height:40px;padding:0 14px;border-radius:8px;background:#fff;color:#000;font-size:14px;font-weight:500;white-space:nowrap;flex:none;transition:background-color .25s ease}
+.tf-btn:hover{background:#e9f4f5}
+.tf-btn:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.apk-btn{background:rgba(255,255,255,.1);color:#fff}
+.apk-btn:hover{background:rgba(255,255,255,.18)}
 
 /* ---------- Contract address: short in the button, full address in a pop-up on hover, copies on click ---------- */
 .ca{position:relative;flex:none;display:inline-flex;align-items:center;gap:9px;height:40px;padding:0 12px 0 5px;border-radius:8px;background:rgba(255,255,255,.08);color:var(--text);font:400 14px/1 "DM Sans",sans-serif;font-variant-numeric:tabular-nums;cursor:pointer;transition:background-color .25s ease}
@@ -94,13 +100,14 @@ p{font-size:16px;line-height:1.45;letter-spacing:-.01em;color:var(--muted)}
 /* ==========================================================
    DOCK — the nav floats at the bottom of the screen, like the app's tab bar
    ========================================================== */
-.dock{position:fixed;left:50%;top:18px;z-index:50;display:flex;align-items:center;gap:6px;padding:6px;border-radius:12px;background:rgba(12,18,20,.86);border:1px solid rgba(255,255,255,.08);box-shadow:0 20px 50px rgba(0,0,0,.45);transform:translate(-50%,-24px);opacity:0;transition:opacity .6s ease,transform .8s var(--ease)}
+/* width:max-content: centred with left:50%, it would otherwise only get half the screen and wrap its links */
+.dock{position:fixed;left:50%;top:18px;z-index:50;width:max-content;display:flex;align-items:center;gap:6px;padding:6px;border-radius:12px;background:rgba(12,18,20,.86);border:1px solid rgba(255,255,255,.08);box-shadow:0 20px 50px rgba(0,0,0,.45);transform:translate(-50%,-24px);opacity:0;transition:opacity .6s ease,transform .8s var(--ease)}
 .dock.in{opacity:1;transform:translate(-50%,0)}
 .dock-brand{display:flex;align-items:center;gap:9px;padding:0 10px 0 4px}
 .dock-brand .tile{width:30px;height:30px}
 .dock-name{font-size:19px;font-weight:600;letter-spacing:-.04em}
 .dock-links{display:flex;gap:2px;padding:0 4px;border-left:1px solid var(--line);border-right:1px solid var(--line)}
-.dock-links a{padding:11px 13px;border-radius:8px;font-size:15px;color:var(--muted);transition:color .25s ease,background-color .25s ease}
+.dock-links a{padding:11px 13px;border-radius:8px;font-size:15px;white-space:nowrap;color:var(--muted);transition:color .25s ease,background-color .25s ease}
 .dock-links a:hover{color:#fff}
 .dock-links a.active{color:#fff;background:rgba(255,255,255,.08)}
 .dock-links a:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
@@ -429,7 +436,7 @@ html.intro-on,html.intro-on body{overflow:hidden}
   .tri>.l,.tri>.r,.final-spot{grid-column:1}
   .m-spot{display:block;position:relative;height:min(52svh,440px);margin:20px 0 26px}
 
-  .dock{left:10px;right:10px;top:10px;max-width:520px;margin:0 auto;transform:translateY(-24px);justify-content:space-between}
+  .dock{left:10px;right:10px;top:10px;width:auto;max-width:520px;margin:0 auto;transform:translateY(-24px);justify-content:space-between}
   .dock.in{transform:none}
   .dock-links{display:none}
   .dock .ca{flex:1;min-width:0;justify-content:flex-start}
@@ -437,6 +444,8 @@ html.intro-on,html.intro-on body{overflow:hidden}
   .dock-name{display:none}
   .dock-brand{padding:0 2px}
   .burger{display:block}
+  .dock>.tf-btn{display:none} /* phones: it's in the menu instead */
+  .sheet .tf-wide{height:46px;margin-top:10px;padding:0 14px;border:0;font-size:16px;letter-spacing:0}
   .sheet{display:flex;flex-direction:column;gap:2px;position:absolute;left:0;right:0;top:calc(100% + 8px);padding:10px;border-radius:12px;background:rgba(12,18,20,.97);border:1px solid rgba(255,255,255,.08);opacity:0;transform:translateY(-10px);pointer-events:none;transition:opacity .3s ease,transform .45s var(--ease)}
   .dock.open .sheet{opacity:1;transform:none;pointer-events:auto}
   .sheet a{padding:14px 10px;font-size:22px;font-weight:500;letter-spacing:-.03em;border-bottom:1px solid var(--line)}
